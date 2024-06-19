@@ -1,33 +1,35 @@
 package com.vac.main.model;
 
-import com.vac.main.data.dto.RoleDto;
-import com.vac.main.data.dto.UserDto;
-import lombok.Getter;
+import java.util.Collection;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import com.vac.main.data.dto.UserDto;
+
+import lombok.Getter;
 
 @Getter
 public class IBUserDetails implements UserDetails {
 
-	private static final long serialVersionUID = 1L;
-	private final String userName;
+    private static final long serialVersionUID = 1L;
+    private final String userName;
+    private final String firstName;
+    private final String lastName;
     private final String password;
     private final String emailAddress;
-    private final String phoneNumber;
-    private final String realName;
+    private final String timeZone;
     private final Collection<SimpleGrantedAuthority> authorities;
 
-    public IBUserDetails(UserDto user, List<RoleDto> roles) {
-        authorities = roles.stream().map(r -> new SimpleGrantedAuthority(r.getRole())).toList();
-        userName = user.userName();
+    public IBUserDetails(UserDto user) {
+        authorities = user.roles().stream().map(r -> new SimpleGrantedAuthority(r.role())).toList();
+        userName = user.handle();
+        firstName = user.firstName();
+        lastName = user.lastName();
         password = user.password();
         emailAddress = user.emailAddress();
-        phoneNumber = user.phoneNumber();
-        realName = user.realName();
+        timeZone = user.timeZone();
     }
 
     @Override

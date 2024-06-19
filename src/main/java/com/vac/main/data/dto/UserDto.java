@@ -1,5 +1,9 @@
 package com.vac.main.data.dto;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Set;
+
 /**
  * <h1>UserDto</h1>
  * <p>
@@ -7,11 +11,15 @@ package com.vac.main.data.dto;
  * </p>
  */
 public record UserDto(
-        Integer userId,
-        String password,
-        String userName,
+
+        BigDecimal userId,
+        String handle,
+        String firstName,
+        String lastName,
         String emailAddress,
-        String phoneNumber,
-        String realName
-) {
+        LocalDate dateEstablished,
+        String password,
+        Boolean isActive,
+        String timeZone,
+        Set<RoleDto> roles) {
 }

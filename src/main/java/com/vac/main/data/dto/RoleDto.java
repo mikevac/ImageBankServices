@@ -1,26 +1,20 @@
 package com.vac.main.data.dto;
 
-
-import java.time.OffsetDateTime;
-
-import lombok.Getter;
-import lombok.Setter;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * <h1>RoleDto</h1>
  * <p>
- * Transfer object to represent a single role associated to a user.  Roles
- * expire based upon payments and fees.  if the expiration field is null,
- * the role does not expire.
+ * Transfer object to represent a single role associated to a user. Roles expire
+ * based upon payments and fees. if the expiration field is null, the role does
+ * not expire.
  * </p>
  */
-@Getter
-@Setter
-public class RoleDto {
+public record RoleDto(
 
-    public Integer userRoleId;
-    public Integer userId;
-    public String role;
-    public OffsetDateTime expiration;
-    
+        BigDecimal userRoleId,
+        BigDecimal userId,
+        String role,
+        LocalDate expiration) {
 }
