@@ -1,0 +1,131 @@
+.App {
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+h2,input, p {
+  padding-top: .05em;
+  padding-bottom: .05em;
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+
+.dialogHeading {
+  margin-bottom: 1em;
+  margin-left: .5em;
+  margin-top: .25em;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.App-header {
+  text-align: center;
+}
+
+.spacer{
+  height: 8em;
+}
+
+.header {
+  width: 98%;
+  height: 5%;
+  padding-left: 1em;
+  padding-right: 1em;
+  display: block;
+}
+
+.leftHeader {
+  float: left;
+}
+.rightHeader {
+  float: right;
+}
+
+.loginDialog {
+  float: left;
+  margin-left: 37%;
+  margin-right: 37%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+}
+
+.footer {
+  width:98%;
+  text-align: center;
+  float: left;
+  margin-left: auto;
+  margin-right:auto;
+  position:absolute;
+  bottom: 2%;
+}
+
+.inputLine {
+  float:left;
+  width: 100%;
+  margin-top: .1em;
+  margin-bottom: .1em;
+}
+
+.inputLabel {
+  float: left;
+  width: 25%;
+  text-align: right;
+}
+
+.inputControl {
+  float:left;
+  margin-left: 1em;
+  /* margin-right: auto;
+  margin-top: 1em;*/
+}
+
+.dialogButton {
+  float:left;
+  width: 100%;
+  margin-left:1em;
+}
+
+.dialogLinks {
+  float:left;
+  margin-left: 1em;
+  font-size: 10pt;
+  margin-bottom: .5em;
+}
