@@ -25,6 +25,7 @@ public class ImageBankSecurityConfiguration {
 		    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 		    .authorizeHttpRequests(
 						authorize -> authorize
+						    .requestMatchers("/").permitAll()
 						    .requestMatchers("/login").permitAll()
 						    .requestMatchers("/js").permitAll()
 						    .requestMatchers("/registration").permitAll()
@@ -32,12 +33,13 @@ public class ImageBankSecurityConfiguration {
 						    .anyRequest().authenticated()
 		    )
 
-		    .formLogin(form -> form
-		            .loginPage("/login").permitAll()
-		            .failureForwardUrl("/login?fail").permitAll()
-		            .loginProcessingUrl("/login").permitAll()
-		            .successForwardUrl("/secure/home")
-		    )
+//		    .formLogin(form -> form
+//		            .
+//		            .loginPage("/login").permitAll()
+//		            .failureForwardUrl("/login?fail").permitAll()
+//		            .loginProcessingUrl("/login").permitAll()
+//		            .successForwardUrl("/secure/home")
+//		    )
 		    .authenticationProvider(authenticationProvider);
 		// @formatter:on
         return httpSecurity.build();

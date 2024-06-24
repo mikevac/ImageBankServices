@@ -18,10 +18,8 @@ import jakarta.validation.Valid;
 public class LoginController {
 
     @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Object> getLogin() {
-        Map<String, Object> parameters = new HashMap<>();
-
-        return parameters;
+    public String getLogin() {
+        return "login";
     }
 
     @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
