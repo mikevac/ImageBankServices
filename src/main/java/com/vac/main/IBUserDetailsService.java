@@ -14,10 +14,6 @@ public class IBUserDetailsService implements UserDetailsService {
     @Autowired
     private UserService userService;
 
-    public IBUserDetailsService() {
-
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDto ibUser = userService.findUser(username);
