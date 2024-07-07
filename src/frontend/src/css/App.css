@@ -80,8 +80,8 @@ h2,input, p {
 
 .loginDialog {
   float: left;
-  margin-left: 37%;
-  margin-right: 37%;
+  margin-left: 34%;
+  margin-right: 34%;
   border-style: solid;
   border-width: 1px;
   border-color: black;
@@ -128,4 +128,11 @@ h2,input, p {
   margin-left: 1em;
   font-size: 10pt;
   margin-bottom: .5em;
+}
+
+.dialogLabel {
+  width: 150px;
+  text-align: right;
+  float: inline-start;
+  margin-right: 8px;
 }

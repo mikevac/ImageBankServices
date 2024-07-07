@@ -1,40 +1,33 @@
 import './css/App.css';
-import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import {useState, createContext} from 'react';
+import {useState, createContext, useEffect} from 'react';
 import Login from './components/Login';
 import Registration from './components/Registration';
 import Worklist from './components/Worklist.js';
+import ForgotPassword from './components/ForgotPassword';
+import axios from 'axios';
 
 export const Configuration = createContext({});
 
 const App = () => {
-  const [urlBase, setUrlBase] = useState('https://localhost:8080/imagebank');
+  const [urlBase, setUrlBase] = useState('https://localhost:8080/');
   const [csrfToken, setCsrfToken] = useState('');
-
-  fetch('hostfile.json',
-    { headers: {
-      'Content-Type': 'application/json',
-      'Accept' : 'application/json'
-      }
-    }
-  )
-    .then((r) => r.json())
-    .then((r) => {
-      setUrlBase(r.data.host + r.data.context + "/");
-      setCsrfToken(r.data._csrf);
-    }
-  );
+  const [currentView, setCurrentView] = useState('login');
+  useEffect( () => {
+    axios.get('http://localhost:8080/config')
+      .then((response) => { 
+        setUrlBase(response.data.baseUrl + response.data.context);
+        setCsrfToken(response.data.token.token);
+    });
+  }, []);
 
   return (
   <>
-    <Configuration.Provider value={{"url": urlBase, "csrf":csrfToken}}>
-      <Router>
-          <Routes>
-            <Route path="/" element={<Login/>} />
-            <Route path="/register" element={<Registration/>} />
-            <Route path="/worklist" element={<Worklist/>} />
-          </Routes>
-      </Router>
+    {console.log('currentView is ' + currentView)}
+    <Configuration.Provider value={{"url": urlBase, "csrf":csrfToken, "setCurrentView" : setCurrentView}}>
+      {currentView === 'login' && <Login/>}
+      {currentView === 'registration' && <Registration/>}
+      {currentView === 'worklist' && <Worklist/>}
+      {currentView === 'forgotPassword' && <ForgotPassword/>} 
     </Configuration.Provider>
   </>
 )};

@@ -1,7 +1,8 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
-import {Configuration} from '../App';
+import { Configuration } from '../App';
+import Header from './pageElements/Header';
+import Footer from './pageElements/Footer';
 
 const Registration = () => {
     const [errorMsg, setErrorMsg] = useState('');
@@ -9,48 +10,81 @@ const Registration = () => {
     const [password, setPassword] = useState('');
     const [emailAddr, setEmailAddr] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
-    const [passStyle, setPassStyle] = useState('color:blue;');
-    const history = useNavigate();
+    const [passStyle, setPassStyle] = useState('color:blue');
 
     const configuration = useContext(Configuration);
-    const sendRegistration = async() => {
+    const sendRegistration = async () => {
         try {
-            if (!userName || !password || !emailAddr ){
+            if (!userName || !password || !emailAddr) {
                 setErrorMsg('Missing details.  Please fill in all fields');
                 return;
             }
-            const response = axios.post( configuration.url + '/ib/registration',{
+            if (confirmPass !== password) {
+                setErrorMsg('Passwords do not match');
+                setPassStyle("color:red");
+                return;
+            }
+            const response = axios.post(configuration.url + '/ib/registration', {
                 userName,
                 password,
                 emailAddr,
-                "_csrf":configuration.csrfToken
+                "_csrf": configuration.csrfToken
             });
             console.log(response);
-            history('/dashboard');
-        } catch( error ){
+            configuration.setCurrentView('login');
+        } catch (error) {
             console.log('registration', error.response ? error.response.data : error.msg);
             setErrorMsg(error.msg);
         }
     }
 
-    const checkPassword = () => {
-        confirmPass !== password ? setPassStyle('color:red;') :
-            setPassStyle('color:blue');
-    }
+    return (
+        <>
+            <Header />
+            <div className="spacer"></div>
+            <div className="loginDialog">
+                <h2 className="dialogHeading">New Login Registration</h2>
 
-    <div>
-        <h2 className="dialogHeading">New Login Registration</h2>
-        {errorMsg && <p className="error">{errorMsg}</p>}
-            <input type="text" id='userName' placeholder={"User Name"} value={userName}
-                onChange={(e) => setUserName(e.target.value)}/>
-            <input type="text" id='password' value={password}
-                onChange={(e) => setPassword(e.target.value)}/>
-            <input type="text" id='confirmPass' value='' style={passStyle}
-                onChange={(e) => {setConfirmPass(e.target.value); checkPassword();}}/>
-            <input type="text" id="emailAddr" value={emailAddr}
-                onChange={(e) => setEmailAddr(e.target.value)}/>
-        <button onClick={sendRegistration}>Register</button>
-    </div>
+                <form>
+                    {errorMsg && <p className="error">{errorMsg}</p>}
+                    <div>
+                        <p><span className="dialogLabel">UserName:</span>
+                            <input type="text" id='userName' value={userName}
+                                onChange={(e) => setUserName(e.target.value)} />
+                        </p>
+                    </div>
+                    <div>
+                        <p><span className="dialogLabel">Password:</span>
+                            <input type="text" id='password' value={password}
+                                onChange={(e) => setPassword(e.target.value)} />
+                        </p>
+                    </div>
+                    <div>
+                        <p><span className="dialogLabel">Confirm Password:</span>
+                            <input type="text" id='confirmPass' value='' style={{ passStyle }}
+                                onChange={(e) => setConfirmPass(e.target.value)} />
+                        </p>
+                    </div>
+                    <div>
+                        <p><span className="dialogLabel">Email Address:</span>
+                            <input type="text" id="emailAddr" value={emailAddr}
+                                onChange={(e) => setEmailAddr(e.target.value)} />
+                        </p>
+                    </div>
+                    <div>
+                        <p>&nbsp;</p>
+                    </div>
+                    <div className="dialogButton">
+                        <p className="inputLabel"></p>
+                        <button type="submit" onClick={sendRegistration}>Register</button>
+                    </div>
+                    <div>
+                        <p>&nbsp;</p>
+                    </div>
+                </form>
+            </div>
+            <Footer />
+        </>);
 };
 
 export default Registration;

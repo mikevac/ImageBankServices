@@ -15,6 +15,7 @@ public class JwtTokenValidator implements Filter {
             throws IOException, ServletException {
         // TODO Auto-generated method stub
 
+        chain.doFilter(request, response);
     }
 
 }
