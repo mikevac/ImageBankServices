@@ -4,7 +4,6 @@ import { useState, useContext } from "react";
 import { Configuration } from "../App";
 import axios from "axios";
 
-
 const Login = (setUser) => {
     const [errorMsg, setErrorMsg] = useState('');
     const [userName, setUserName] = useState('');
@@ -64,10 +63,8 @@ const Login = (setUser) => {
             </form>
             <div className="dialogLinks">
                 <p>&nbsp;</p>
-                <p>
-                    <a href="/forgot" onClick={handleForgotPassword}>Forgot password</a>
-                </p>
-                    <p onClick={handleRegistration}>Register A New Account</p>
+                <p className="buttonLink" onClick={handleForgotPassword}>Forgot password</p>
+                <p className="buttonLink" onClick={handleRegistration}>Register A New Account</p>
             </div>
         </div>
         <Footer />

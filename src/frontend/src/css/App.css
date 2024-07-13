@@ -117,6 +117,18 @@ h2,input, p {
   margin-top: 1em;*/
 }
 
+.dialogLine {
+  width:100%;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.buttonLink {
+  cursor: pointer;
+  color:blue;
+}
+
+
 .dialogButton {
   float:left;
   width: 100%;

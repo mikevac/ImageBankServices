@@ -9,11 +9,11 @@ import axios from 'axios';
 export const Configuration = createContext({});
 
 const App = () => {
-  const [urlBase, setUrlBase] = useState('https://localhost:8080/');
+  const [urlBase, setUrlBase] = useState('https://localhost:8080/ib/');
   const [csrfToken, setCsrfToken] = useState('');
   const [currentView, setCurrentView] = useState('login');
   useEffect( () => {
-    axios.get('http://localhost:8080/config')
+    axios.get('https://localhost:8080/ib/config')
       .then((response) => { 
         setUrlBase(response.data.baseUrl + response.data.context);
         setCsrfToken(response.data.token.token);

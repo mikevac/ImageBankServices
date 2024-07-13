@@ -17,7 +17,7 @@ public class SplashPageController {
     @Value("${config.baseurl}")
     private String baseUrl;
 
-    @Value("${server.context-path}")
+    @Value("${server.servlet.context-path}")
     private String serverContext;
 
     @GetMapping("")

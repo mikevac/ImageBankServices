@@ -14,6 +14,7 @@ const Registration = () => {
 
     const configuration = useContext(Configuration);
     const sendRegistration = async () => {
+        console.log("sending registration with " + configuration.url);
         try {
             if (!userName || !password || !emailAddr) {
                 setErrorMsg('Missing details.  Please fill in all fields');
@@ -24,12 +25,13 @@ const Registration = () => {
                 setPassStyle("color:red");
                 return;
             }
-            const response = axios.post(configuration.url + '/ib/registration', {
+            const response = axios.post('https://localhost:8080/ib/registration', {
                 userName,
                 password,
                 emailAddr,
                 "_csrf": configuration.csrfToken
             });
+            await response;
             console.log(response);
             configuration.setCurrentView('login');
         } catch (error) {
@@ -47,25 +49,25 @@ const Registration = () => {
 
                 <form>
                     {errorMsg && <p className="error">{errorMsg}</p>}
-                    <div>
+                    <div className="dialogLine">
                         <p><span className="dialogLabel">UserName:</span>
                             <input type="text" id='userName' value={userName}
                                 onChange={(e) => setUserName(e.target.value)} />
                         </p>
                     </div>
-                    <div>
+                    <div className="dialogLine">
                         <p><span className="dialogLabel">Password:</span>
                             <input type="text" id='password' value={password}
                                 onChange={(e) => setPassword(e.target.value)} />
                         </p>
                     </div>
-                    <div>
+                    <div className="dialogLine">
                         <p><span className="dialogLabel">Confirm Password:</span>
                             <input type="text" id='confirmPass' value='' style={{ passStyle }}
                                 onChange={(e) => setConfirmPass(e.target.value)} />
                         </p>
                     </div>
-                    <div>
+                    <div className="dialogLine">
                         <p><span className="dialogLabel">Email Address:</span>
                             <input type="text" id="emailAddr" value={emailAddr}
                                 onChange={(e) => setEmailAddr(e.target.value)} />
