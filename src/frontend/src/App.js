@@ -13,16 +13,18 @@ const App = () => {
   const [csrfToken, setCsrfToken] = useState('');
   const [currentView, setCurrentView] = useState('login');
   useEffect( () => {
-    axios.get('https://localhost:8080/ib/config')
-      .then((response) => { 
-        setUrlBase(response.data.baseUrl + response.data.context);
-        setCsrfToken(response.data.token.token);
-    });
-  }, []);
+    if (csrfToken === '') {
+      axios.get('/ib/config')
+        .then((response) => { 
+          setUrlBase(response.data.baseUrl + response.data.context);
+          setCsrfToken(response.data.token.token);
+          console.log("csrf = " + response.data.token.token);
+      });
+    }
+  }, [csrfToken]);
 
   return (
   <>
-    {console.log('currentView is ' + currentView)}
     <Configuration.Provider value={{"url": urlBase, "csrf":csrfToken, "setCurrentView" : setCurrentView}}>
       {currentView === 'login' && <Login/>}
       {currentView === 'registration' && <Registration/>}

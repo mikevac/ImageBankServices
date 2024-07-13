@@ -14,30 +14,36 @@ const Registration = () => {
 
     const configuration = useContext(Configuration);
     const sendRegistration = async () => {
-        console.log("sending registration with " + configuration.url);
-        try {
-            if (!userName || !password || !emailAddr) {
-                setErrorMsg('Missing details.  Please fill in all fields');
-                return;
+        console.log("sending registration with " + configuration.csrf);
+        if (!userName || !password || !emailAddr) {
+            setErrorMsg('Missing details.  Please fill in all fields');
+            return;
+        }
+        if (confirmPass !== password) {
+            setErrorMsg('Passwords do not match');
+            setPassStyle("color:red");
+            return;
+        }
+        axios.post('/ib/registration', {
+                userName : userName,
+                password : password,
+                emailAddr: emailAddr
+            },
+            { headers: {
+                'X-XSRF-TOKEN': configuration.csrf,
+                "Content-Type":'application/json'
+                }
             }
-            if (confirmPass !== password) {
-                setErrorMsg('Passwords do not match');
-                setPassStyle("color:red");
-                return;
-            }
-            const response = axios.post('https://localhost:8080/ib/registration', {
-                userName,
-                password,
-                emailAddr,
-                "_csrf": configuration.csrfToken
-            });
-            await response;
-            console.log(response);
+        )
+        .then((r) =>{
+            console.log('success ', r);
             configuration.setCurrentView('login');
-        } catch (error) {
+    
+        })
+        .catch((error) => {
             console.log('registration', error.response ? error.response.data : error.msg);
             setErrorMsg(error.msg);
-        }
+        });
     }
 
     return (
@@ -47,29 +53,32 @@ const Registration = () => {
             <div className="loginDialog">
                 <h2 className="dialogHeading">New Login Registration</h2>
 
-                <form>
+                <div>
                     {errorMsg && <p className="error">{errorMsg}</p>}
                     <div className="dialogLine">
                         <p><span className="dialogLabel">UserName:</span>
-                            <input type="text" id='userName' value={userName}
+                            <input type="text" id='userName' name='userName' value={userName}
                                 onChange={(e) => setUserName(e.target.value)} />
                         </p>
                     </div>
                     <div className="dialogLine">
                         <p><span className="dialogLabel">Password:</span>
                             <input type="text" id='password' value={password}
+                                name='password'
                                 onChange={(e) => setPassword(e.target.value)} />
                         </p>
                     </div>
                     <div className="dialogLine">
                         <p><span className="dialogLabel">Confirm Password:</span>
-                            <input type="text" id='confirmPass' value='' style={{ passStyle }}
+                            <input type="text" id='confirmPass' style={{passStyle}}
+                                name='confirmPass'
                                 onChange={(e) => setConfirmPass(e.target.value)} />
                         </p>
                     </div>
                     <div className="dialogLine">
                         <p><span className="dialogLabel">Email Address:</span>
                             <input type="text" id="emailAddr" value={emailAddr}
+                                name='emailAddr'
                                 onChange={(e) => setEmailAddr(e.target.value)} />
                         </p>
                     </div>
@@ -78,12 +87,12 @@ const Registration = () => {
                     </div>
                     <div className="dialogButton">
                         <p className="inputLabel"></p>
-                        <button type="submit" onClick={sendRegistration}>Register</button>
+                        <button type="button" onClick={sendRegistration}>Register</button>
                     </div>
                     <div>
                         <p>&nbsp;</p>
                     </div>
-                </form>
+                </div>
             </div>
             <Footer />
         </>);

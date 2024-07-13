@@ -33,7 +33,6 @@ const Login = (setUser) => {
     }
 
     const handleRegistration = () => {
-        console.log("handle registration");
         configuration.setCurrentView('registration');
     }
     return (
