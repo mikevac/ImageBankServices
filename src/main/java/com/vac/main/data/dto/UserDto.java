@@ -13,7 +13,7 @@ import java.util.Set;
 public record UserDto(
 
         BigDecimal userId,
-        String handle,
+        String userName,
         String firstName,
         String lastName,
         String emailAddress,

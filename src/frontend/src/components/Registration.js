@@ -9,6 +9,8 @@ const Registration = () => {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [emailAddr, setEmailAddr] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
     const [passStyle, setPassStyle] = useState('color:blue');
 
@@ -26,6 +28,8 @@ const Registration = () => {
         }
         axios.post('/ib/registration', {
                 userName : userName,
+                firstName: firstName,
+                lastName: lastName,
                 password : password,
                 emailAddr: emailAddr
             },
@@ -59,6 +63,18 @@ const Registration = () => {
                         <p><span className="dialogLabel">UserName:</span>
                             <input type="text" id='userName' name='userName' value={userName}
                                 onChange={(e) => setUserName(e.target.value)} />
+                        </p>
+                    </div>
+                    <div className="dialogLine">
+                        <p><span className="dialogLabel">First Name:</span>
+                            <input type="text" id='firstName' name='firstName' value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)} />
+                        </p>
+                    </div>
+                    <div className="dialogLine">
+                        <p><span className="dialogLabel">Last Name:</span>
+                            <input type="text" id='lastName' name='lastName' value={lastName}
+                                onChange={(e) => setLastName(e.target.value)} />
                         </p>
                     </div>
                     <div className="dialogLine">

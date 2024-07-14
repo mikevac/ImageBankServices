@@ -24,7 +24,7 @@ public class IBUserDetails implements UserDetails {
 
     public IBUserDetails(UserDto user) {
         authorities = user.roles().stream().map(r -> new SimpleGrantedAuthority(r.role())).toList();
-        userName = user.handle();
+        userName = user.userName();
         firstName = user.firstName();
         lastName = user.lastName();
         password = user.password();

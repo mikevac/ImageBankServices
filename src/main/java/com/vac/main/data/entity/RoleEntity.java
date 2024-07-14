@@ -1,39 +1,46 @@
 package com.vac.main.data.entity;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Set;
+
+import com.vac.main.data.dto.RoleDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
 
+/**
+ * The role entity represents a row in the role table.
+ */
 @Getter
-@Entity
+@Setter
+@Entity(name = "role")
 @Table(name = "role", schema = "ibank")
 public class RoleEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_id_seq")
-    @Column(name = "user_role_id")
-    private BigDecimal userRoleId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ibank.role_id_seq")
+    @Column(name = "role_id")
+    private BigDecimal roleId;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private UserEntity user;
+    @OneToMany(mappedBy = "roleEntity")
+    private Set<UserRoleEntity> userRoles;
 
     @Column(name = "ROLE")
     private String role;
 
-    @Column(name = "EXPIRATION")
-    private Date expiration;
+    public RoleEntity() {
 
-    public UserEntity getUser() {
-        return user;
+    }
+
+    public RoleEntity(RoleDto dto) {
+        roleId = dto.roleId();
+        role = dto.role();
     }
 }

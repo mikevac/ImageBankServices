@@ -1,7 +1,6 @@
 package com.vac.main.data.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 /**
  * <h1>RoleDto</h1>
@@ -11,10 +10,9 @@ import java.time.LocalDate;
  * not expire.
  * </p>
  */
+
 public record RoleDto(
 
-        BigDecimal userRoleId,
-        BigDecimal userId,
-        String role,
-        LocalDate expiration) {
+        BigDecimal roleId,
+        String role) {
 }

@@ -1,5 +1,7 @@
 package com.vac.main.repositories;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -7,7 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import com.vac.main.data.dto.RoleDto;
 import com.vac.main.data.dto.UserDto;
+import com.vac.main.data.entity.RoleEntity;
 import com.vac.main.data.entity.UserEntity;
+import com.vac.main.data.entity.UserRoleEntity;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -38,13 +42,13 @@ public class UserRepository {
                 (UserEntity) em.createQuery(SQL_FETCH_USER)
                 .setParameter("handle", handle)
                 .getSingleResult();
-        Set<RoleDto> roles = user.getRoles()
+         Set<RoleDto> roles = user.getUserRoleEntities()
                 .stream()
-                .map(r -> new RoleDto(r.getUserRoleId(), r.getUser().getUserId(), r.getRole(), r.getExpiration().toLocalDate() ))
+                .map((r) -> new RoleDto(r.getRoleEntity().getRoleId(), r.getRoleEntity().getRole()))
                 .collect(Collectors.toSet());
      
         return new UserDto(user.getUserId(), 
-                user.getHandle(), 
+                user.getUserName(), 
                 user.getFirstName(), 
                 user.getLastName(),
                 user.getEmailAddress(), 
@@ -54,5 +58,20 @@ public class UserRepository {
                 user.getTimeZone(),
                 roles);
         // @formatter:on
+    }
+
+    public void createUser(UserDto userDto, RoleDto roleDto) {
+        try {
+            var userEntity = new UserEntity(userDto, roleDto);
+            em.persist(userEntity);
+            var roleEntity = em.find(RoleEntity.class, roleDto.roleId());
+            var userRoleEntity = new UserRoleEntity();
+            userRoleEntity.setUserEntity(userEntity);
+            userRoleEntity.setRoleEntity(roleEntity);
+            userRoleEntity.setExpiration(Date.valueOf(LocalDate.now().plusYears(1L)));
+            em.persist(userRoleEntity);
+        } catch (Exception x) {
+            x.printStackTrace();
+        }
     }
 }

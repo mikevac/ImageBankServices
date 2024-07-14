@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Set;
 
+import com.vac.main.data.dto.RoleDto;
+import com.vac.main.data.dto.UserDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,12 +25,12 @@ import lombok.Setter;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ibank.user_id_seq")
     @Column(name = "user_id")
     private BigDecimal userId;
 
-    @Column(name = "handle")
-    private String handle;
+    @Column(name = "user_name")
+    private String userName;
 
     @Column(name = "first_name")
     private String firstName;
@@ -53,11 +56,24 @@ public class UserEntity {
     @Column(name = "time_zone")
     private String timeZone;
 
-    @OneToMany(mappedBy = "user")
-    private Set<RoleEntity> roles;
+    @OneToMany(mappedBy = "userEntity")
+    private Set<UserRoleEntity> userRoleEntities;
 
     public UserEntity() {
 
+    }
+
+    public UserEntity(UserDto dto, RoleDto roleDto) {
+        userId = dto.userId();
+        userName = dto.userName();
+        firstName = dto.firstName();
+        lastName = dto.lastName();
+        emailAddress = dto.emailAddress();
+        password = dto.password();
+        active = dto.isActive();
+        dateEstablished = Date.valueOf(dto.dateEstablished());
+        deleted = false;
+        timeZone = dto.timeZone();
     }
 
 }
