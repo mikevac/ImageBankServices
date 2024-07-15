@@ -5,8 +5,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.BindException;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.vac.main.data.dto.RoleDto;
 import com.vac.main.data.dto.UserDto;
 import com.vac.main.requests.RegistrationRequest;
+import com.vac.main.response.ErrorResponse;
 import com.vac.main.services.UserService;
 
 import jakarta.validation.Valid;
@@ -25,6 +28,14 @@ public class RegistrationController {
 
     @Autowired
     private UserService userService;
+
+    @ExceptionHandler({ BindException.class })
+    public ErrorResponse exceptionHandler() {
+
+        var errorResponse = new ErrorResponse();
+        errorResponse.setResponseStatus("FAILED");
+        return errorResponse;
+    }
 
     @PostMapping(path = "", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody

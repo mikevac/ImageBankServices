@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ConfigResponse {
+public class ConfigResponse extends BaseResponse {
 
     private String context;
     private String baseUrl;
