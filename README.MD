@@ -18,4 +18,6 @@ I will be updating these versions from time to time.
 
 ## Project Goals
 
-I started this project in the summer of 2024, and will work on it as time permits.  The goal is to get a working version of ImageBank to run in the AWS Cloud, eventually moving towards a microservice architecture.
+I started this project in the summer of 2024, and will work on it as time permits.  The goal is to get a working version of ImageBank to run in the AWS Cloud, eventually moving towards a microservice architecture.  Once complete, the intention is to document via a series of articles and videos on how this work was accomplished, identify the challenges and what was needed to overcome them.
+
+The project will become a teaching tool for other software developers.  I also intend to learn from those who critique my work and suggest better approaches.
