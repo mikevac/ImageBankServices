@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog changeLogId="ib-role"
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+	<changeSet author="Michael Vaccaro" id="ib-schema">
+		<sql dbms="postgresql" endDelimiter=";">
+			CREATE ROLE ibankadmin LOGIN
+			PASSWORD 'ibankadmin'
+			VALID UNTIL 'infinity';
+		</sql>
+		<sql dbms="postgresql" endDelimiter=";">
+			CREATE ROLE ibankuser LOGIN
+			PASSWORD 'ibankuser'
+			VALID UNTIL 'infinity'
+		</sql>
+		<sql dbms="posgresql" endDelimiter=";">
+			CREATE DATABASE image_bank
+			WITH ENCODING = 'UTF8'
+			OWNER = ibankadmin
+			CONNECTION LIMIT = -1;
+		</sql>
+		<sql dbms="postgresql" endDelimiter=";">
+			CREATE SCHEMA ibank AUTHORIZATION ibankadmin
+		</sql>
+		<sql dbms="postgresql" endDelimiter=";">
+			GRANT ALL ON SCHEMA ibank TO
+			ibankadmin
+		</sql>
+		<sql dbms="postgresql" endDelimiter=";">
+			GRANT USAGE ON SCHEMA ibank to
+			ibankuser
+		</sql>
+	</changeSet>
+
+	<changeSet author="Michael Vaccaro" id="ib-user">
+		<createTable tableName="user" schemaName="ibank" >
+			<column name="user_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="user_name" type="varchar(200)">
+				<constraints nullable="false" />
+			</column>
+			<column name="first_name" type="varchar(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="last_name" type="varchar(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="email_address" type="varchar(500)">
+				<constraints nullable="false" />
+			</column>
+			<column name="password" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="active" type="boolean" defaultValue="false">
+				<constraints nullable="false" />
+			</column>
+			<column name="deleted" type="boolean" defaultValue="false">
+				<constraints nullable="false" />
+			</column>
+			<column name="time_zone" type="varchar(3)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createIndex tableName="user" indexName="user_idx" schemaName="ibank">
+			<column name="last_name" />
+			<column name="first_name" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="Michael Vaccaro" id="ib-role">
+		<createTable tableName="role" schemaName="ibank">
+			<column name="role_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="description" type="varchar(200)">
+				<constraints nullable="false" />
+			</column>
+			<column name="role" type="varchar(50)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createIndex tableName="role" indexName="role_idx"	unique="true" schemaName="ibank">
+			<column name="role" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="Michael Vaccaro" id="ib-userRole">
+		<createTable tableName="user_role" schemaName="ibank">
+			<column name="user_role_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="user_id" type="int">
+				<constraints nullable="false" 
+				    references="ibank.user(user_id)"
+				    foreignKeyName="fk_user"  />
+			</column>
+			<column name="role_id" type="int">
+				<constraints nullable="false" 
+				    references="ibank.role(role_id)"
+					foreignKeyName="fk_role" />
+			</column>
+			<column name="expiration" type="timestamp">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createIndex tableName="user_role" indexName="user_rol_idx" schemaName="ibank">
+			<column name="user_id" />
+			<column name="role_id" />
+		</createIndex>
+
+	</changeSet>
+
+	<changeSet author="Michael Vaccaro" id="ib-album">
+		<createTable tableName="album" schemaName="ibank">
+			<column name="album_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="owner_id" type="int">
+				<constraints nullable="false" 
+				    references="ibank.user(user_id)"
+				    foreignKeyName="fk_album_to_user"/>
+			</column>
+			<column name="name" type="varchar(200)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="varchar(500)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createIndex tableName="album" indexName="album_idx" unique="true" schemaName="ibank">
+			<column name="name" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="Michael Vaccaro" id="ib-tag">
+		<createTable tableName="tag" schemaName="ibank">
+			<column name="tag_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="owner_id" type="int">
+				<constraints nullable="false" 
+				    references="ibank.user(user_id)"
+				    foreignKeyName="fk_album_to_owner"/>
+			</column>
+			<column name="tag" type="varchar(200)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createIndex tableName="tag" indexName="tag_idx" unique="true" schemaName="ibank">
+			<column name="tag" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="Michael Vaccaro" id="ib-doc-type">
+		<createTable tableName="doc_type" schemaName="ibank">
+			<column name="doc_type_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="owner_id" type="int">
+				<constraints nullable="false" 
+				    references="ibank.user(user_id)"
+				    foreignKeyName="fk_doc_type_to_owner"/>
+			</column>
+			<column name="doc_type" type="varchar(200)">
+				<constraints nullable="false" />
+			</column>
+			<column name="file_ext_default" type="varchar(10)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createIndex tableName="doc_type" indexName="doc_type_idx" unique="true" schemaName="ibank">
+			<column name="doc_type" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="Michael Vaccaro" id="ib-doc">
+		<createTable tableName="doc" schemaName="ibank">
+			<column name="doc_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="owner_id" type="int">
+				<constraints nullable="false" 
+				    references="ibank.user(user_id)"
+				    foreignKeyName="fk_doc_to_owner" />
+			</column>
+			<column name="doc_type" type="varchar(200)">
+				<constraints nullable="false" />
+			</column>
+			<column name="file_name" type="varchar(200)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createIndex tableName="doc" indexName="ibank.doc_idx" unique="true" schemaName="ibank">
+			<column name="file_name" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="Michael Vaccaro" id="ib-doc-to-album">
+		<createTable tableName="doc_to_album" schemaName="ibank">
+			<column name="doc_to_album_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="doc_id" type="int">
+				<constraints nullable="false" 
+				    references="ibank.doc(doc_id)"
+				    foreignKeyName="fk_doc_id" />
+			</column>
+			<column name="album_id" type="int">
+				<constraints nullable="false"
+				    references="ibank.album(album_id)"
+				    foreignKeyName="fk_album_id"
+                 />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet author="Michael Vaccaro" id="ib-grants">
+		<sql dbms="postgresql" endDelimiter=";">
+			GRANT SELECT ON ALL TABLES IN
+			SCHEMA ibank to ibankuser
+		</sql>
+		<sql dbms="postgresql" endDelimiter=";">
+			GRANT INSERT ON ALL TABLES IN
+			SCHEMA ibank to ibankuser
+		</sql>
+		<sql dbms="postgresql" endDelimiter=";">
+			GRANT UPDATE ON ALL TABLES IN
+			SCHEMA ibank to ibankuser
+		</sql>
+
+
+
+
+		<sql dbms="postgresql" endDelimiter=";">
+			GRANT DELETE ON ALL TABLES IN
+			SCHEMA ibank to ibankuser
+		</sql>
+		<sql dbms="postgresql" endDelimiter=";">
+			GRANT ALL PRIVILEGES ON ALL
+			SEQUENCES IN SCHEMA ibank to ibankuser
+		</sql>
+	</changeSet>
+
+</databaseChangeLog>

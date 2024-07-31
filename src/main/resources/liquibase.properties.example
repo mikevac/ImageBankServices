@@ -1,0 +1,4 @@
+changeLogFile: release-1.0.0.xml
+url: jdbc:postgresql://localhost:5432/postgres?user=????????&password=??????
+driver:org.postgresql.Driver
+classpath: ../drivers/postgresql-42.6.0.jar
