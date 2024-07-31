@@ -28,8 +28,8 @@ The project will become a teaching tool for other software developers.  I also i
 
 Liquibase changesets have been added to establish a process for updating the database.  The initial database may be found in src/main/resources.  Run maven as follows
    
-   mvn liquibase:update
+    mvn liquibase:update
    
 Run maven to get a listing of the dml created and run
 
-   mvn liquibase:updateSQL
+    mvn liquibase:updateSQL
