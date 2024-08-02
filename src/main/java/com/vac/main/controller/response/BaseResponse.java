@@ -1,4 +1,4 @@
-package com.vac.main.response;
+package com.vac.main.controller.response;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,5 +1,7 @@
 package com.vac.main;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,11 +18,11 @@ public class IBUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDto ibUser = userService.findUser(username);
-        if (ibUser == null) {
+        Optional<UserDto> ibUserOpt = userService.findUser(username);
+        if (ibUserOpt.isEmpty()) {
             throw new UsernameNotFoundException("");
         }
-        return new IBUserDetails(ibUser);
+        return new IBUserDetails(ibUserOpt.get());
     }
 
 }

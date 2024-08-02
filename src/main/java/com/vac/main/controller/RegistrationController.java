@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.vac.main.controller.request.RegistrationRequest;
+import com.vac.main.controller.response.ErrorResponse;
 import com.vac.main.data.dto.RoleDto;
 import com.vac.main.data.dto.UserDto;
-import com.vac.main.requests.RegistrationRequest;
-import com.vac.main.response.ErrorResponse;
 import com.vac.main.services.UserService;
+import com.vac.main.services.response.GenericServiceResponse;
 
 import jakarta.validation.Valid;
 
@@ -44,8 +45,8 @@ public class RegistrationController {
         var establishDate = LocalDate.now();
         var user = new UserDto(null, request.getUserName(), request.getFirstName(), request.getLastName(),
                 request.getEmailAddr(), establishDate, request.getPassword(), false, "ET", roles);
-        userService.createUser(user);
-        return "success";
+        GenericServiceResponse response = userService.createUser(user);
+        return response.message();
 
     }
 }

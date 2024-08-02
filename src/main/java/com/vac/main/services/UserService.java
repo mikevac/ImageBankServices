@@ -1,14 +1,18 @@
 package com.vac.main.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.vac.main.constants.ServiceStatus;
 import com.vac.main.data.dto.RoleDto;
 import com.vac.main.data.dto.UserDto;
 import com.vac.main.exceptions.UserNotFoundException;
 import com.vac.main.repositories.RoleRepository;
 import com.vac.main.repositories.UserRepository;
+import com.vac.main.services.response.GenericServiceResponse;
 
 @Service
 public class UserService {
@@ -20,7 +24,7 @@ public class UserService {
     private RoleRepository roleRepo;
 
     @Transactional(readOnly = true)
-    public UserDto findUser(String user) {
+    public Optional<UserDto> findUser(String user) {
         if (user != null) {
             return userRepo.findUser(user);
         }
@@ -28,9 +32,15 @@ public class UserService {
     }
 
     @Transactional
-    public void createUser(UserDto userDto) {
-        RoleDto roleDto = roleRepo.find("USER");
-        userRepo.createUser(userDto, roleDto);
+    public GenericServiceResponse createUser(UserDto userDto) {
+        Optional<RoleDto> roleDtoOpt = roleRepo.find("USER");
+        if (roleDtoOpt.isPresent()) {
+            var roleDto = roleDtoOpt.get();
+            userRepo.createUser(userDto, roleDto);
+            return new GenericServiceResponse(ServiceStatus.SUCCESS, "User has been created");
+        } else {
+            return new GenericServiceResponse(ServiceStatus.FAILURE, "Role is invalid");
+        }
     }
 
 }

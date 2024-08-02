@@ -1,4 +1,4 @@
-package com.vac.main.response;
+package com.vac.main.controller.response;
 
 import org.springframework.security.web.csrf.CsrfToken;
 
