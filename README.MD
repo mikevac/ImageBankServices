@@ -7,14 +7,17 @@ The ImageBank Application in this repository is a demonstration piece showing th
 
 ## Versions
 
-|Tool           | Version |
-|---------------|---------|
-|Java           | 21LTS   |
-|React          | 18.2.0  |
-|Spring Boot    | 3.1.1   |
-|Spring Security| 6.1.1   |
-|Postgresql     | 15      |
-|Liquibase comm | 4.29.0  |
+|Tool                | Version |
+|--------------------|---------|
+|Java                | 21LTS   |
+|React               | 18.2.0  |
+|Spring Boot         | 3.1.1   |
+|Spring Security     | 6.1.1   |
+|Postgresql          | 15      |
+|Liquibase community | 4.29.0  |
+|apache maven        | 3.6.1   |
+|npm                 | 9.8.1   |
+|node.js             | 20.14.0 |
 
 I will be updating these versions from time to time.
 
@@ -33,3 +36,12 @@ Liquibase changesets have been added to establish a process for updating the dat
 Run maven to get a listing of the dml created and run
 
     mvn liquibase:updateSQL
+   
+## Runing in Developer mode
+
+To get the front end running in developer mode, 
+
+    npm run start
+   
+The command serves up the front end on port 3000. 
+
