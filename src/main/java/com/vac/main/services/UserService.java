@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vac.main.constants.ServiceStatus;
 import com.vac.main.data.dto.RoleDto;
 import com.vac.main.data.dto.UserDto;
+import com.vac.main.exceptions.RoleNotFoundException;
 import com.vac.main.exceptions.UserNotFoundException;
 import com.vac.main.repositories.RoleRepository;
 import com.vac.main.repositories.UserRepository;
@@ -33,14 +34,12 @@ public class UserService {
 
     @Transactional
     public GenericServiceResponse createUser(UserDto userDto) {
-        Optional<RoleDto> roleDtoOpt = roleRepo.find("USER");
-        if (roleDtoOpt.isPresent()) {
-            var roleDto = roleDtoOpt.get();
+        RoleDto roleDto = roleRepo.find("USER");
+        if (roleDto != null) {
             userRepo.createUser(userDto, roleDto);
             return new GenericServiceResponse(ServiceStatus.SUCCESS, "User has been created");
-        } else {
-            return new GenericServiceResponse(ServiceStatus.FAILURE, "Role is invalid");
         }
+        throw new RoleNotFoundException();
     }
 
 }

@@ -23,11 +23,11 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 
 /**
- * <h1>UserRepository</h1>
- * <p>
+ * UserRepository
+ * 
  * Class is the repository service bean that executes the sql to access the user
  * and user role tables.
- * </p>
+ * 
  */
 @Repository
 public class UserRepository {

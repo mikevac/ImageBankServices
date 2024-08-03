@@ -1,10 +1,10 @@
 package com.vac.main.constants;
 
 /**
- * <h1>DbColumn</h1>
- * <p>
- * Class documents all valid column names used as parameter source in NamedParameterJdbcTemplate
- * </p>
+ * DbColumn
+ * 
+ * Class documents all valid column names used as parameter source in
+ * NamedParameterJdbcTemplate
  */
 public class DbColumn {
 

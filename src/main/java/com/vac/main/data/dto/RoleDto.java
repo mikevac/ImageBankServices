@@ -1,18 +1,22 @@
 package com.vac.main.data.dto;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
- * <h1>RoleDto</h1>
- * <p>
+ * RoleDto
+ *
  * Transfer object to represent a single role associated to a user. Roles expire
  * based upon payments and fees. if the expiration field is null, the role does
  * not expire.
- * </p>
+ * 
+ * @param roleId an {@link BigInteger} object that holds the primary key of a
+ *               role
+ * @param role   a {@link String} object holding the name of the role: e.g.
+ *               "USER"
  */
 
 public record RoleDto(
 
-        BigDecimal roleId,
+        BigInteger roleId,
         String role) {
 }

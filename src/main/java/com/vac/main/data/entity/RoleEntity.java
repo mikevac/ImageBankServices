@@ -1,6 +1,6 @@
 package com.vac.main.data.entity;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Set;
 
 import com.vac.main.data.dto.RoleDto;
@@ -27,7 +27,7 @@ public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ibank.role_id_seq")
     @Column(name = "role_id")
-    private BigDecimal roleId;
+    private BigInteger roleId;
 
     @OneToMany(mappedBy = "roleEntity")
     private Set<UserRoleEntity> userRoles;

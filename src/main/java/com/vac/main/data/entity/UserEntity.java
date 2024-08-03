@@ -1,6 +1,6 @@
 package com.vac.main.data.entity;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.util.Set;
 
@@ -27,7 +27,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ibank.user_id_seq")
     @Column(name = "user_id")
-    private BigDecimal userId;
+    private BigInteger userId;
 
     @Column(name = "user_name")
     private String userName;
