@@ -11,11 +11,11 @@ The ImageBank Application in this repository is a demonstration piece showing th
 |--------------------|---------|
 |Java                | 21LTS   |
 |React               | 18.2.0  |
-|Spring Boot         | 3.1.1   |
+|Spring Boot         | 3.3.2   |
 |Spring Security     | 6.1.1   |
 |Postgresql          | 15      |
 |Liquibase community | 4.29.0  |
-|apache maven        | 3.6.1   |
+|apache maven        | 3.9.8   |
 |npm                 | 9.8.1   |
 |node.js             | 20.14.0 |
 
