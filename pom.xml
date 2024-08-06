@@ -141,7 +141,7 @@
                 </executions>
                 <configuration>
                     <additionalOptions>-quiet -Xmaxwarns 10</additionalOptions>
-                    <doclint>all</doclint>
+                    <doclint>all,-missing</doclint>
                     <tags>
                        <tag>
                            <name>implNote</name>
