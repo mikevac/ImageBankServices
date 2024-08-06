@@ -25,7 +25,7 @@ import lombok.Setter;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ibank.user_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private BigInteger userId;
 
@@ -71,8 +71,8 @@ public class UserEntity {
         emailAddress = dto.emailAddress();
         password = dto.password();
         active = dto.isActive();
-        dateEstablished = Date.valueOf(dto.dateEstablished());
         deleted = false;
+        dateEstablished = Date.valueOf(dto.dateEstablished());
         timeZone = dto.timeZone();
     }
 
