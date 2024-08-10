@@ -18,6 +18,7 @@ import com.vac.main.controller.request.RegistrationRequest;
 import com.vac.main.controller.response.ErrorResponse;
 import com.vac.main.data.dto.RoleDto;
 import com.vac.main.data.dto.UserDto;
+import com.vac.main.encoders.IBPasswordEncoder;
 import com.vac.main.services.UserService;
 import com.vac.main.services.response.GenericServiceResponse;
 
@@ -26,6 +27,9 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/registration")
 public class RegistrationController {
+
+    @Autowired
+    private IBPasswordEncoder passwordEncoder;
 
     @Autowired
     private UserService userService;
@@ -44,7 +48,8 @@ public class RegistrationController {
         Set<RoleDto> roles = new HashSet<>();
         var establishDate = LocalDate.now();
         var user = new UserDto(null, request.getUserName(), request.getFirstName(), request.getLastName(),
-                request.getEmailAddr(), establishDate, request.getPassword(), false, "ET", roles);
+                request.getEmailAddr(), establishDate, passwordEncoder.encode(request.getPassword()), false, "ET",
+                roles);
         GenericServiceResponse response = userService.createUser(user);
         return response.message();
 

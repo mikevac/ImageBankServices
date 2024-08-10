@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,32 +26,25 @@ import jakarta.servlet.http.HttpServletRequest;
 @ComponentScan("com.vac.main")
 public class ImageBankSecurityConfiguration {
 
+    @Value("${cors.origins}")
+    private String allowedOrigins;
+
     @Autowired
     public IBAuthenticationProvider authenticationProvider;
 
     @Bean
-    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        //@formatter:off
-        AuthenticationManagerBuilder authManBuilder =
-            http.getSharedObject(AuthenticationManagerBuilder.class);
-        authManBuilder.authenticationProvider(authenticationProvider);
-        var authMan = authManBuilder.build();
-        return authMan;
-        //@formatter:on
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // @formatter:off
+        
 		httpSecurity
 		    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-		    //.addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
 		    .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-		    .csrf(csrf-> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+		    .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+		    .httpBasic(Customizer.withDefaults())
+		    .authenticationProvider(authenticationProvider)
 		    .authorizeHttpRequests(
 						authorize -> authorize
 						    .requestMatchers("/").permitAll()
-						    .requestMatchers("/login").permitAll()
 						    .requestMatchers("/config").permitAll()
                             .requestMatchers("/forgot").permitAll()
                             .requestMatchers("/registration").permitAll()
@@ -63,26 +56,28 @@ public class ImageBankSecurityConfiguration {
 						    .requestMatchers("favicon.ico").permitAll()
 						    .requestMatchers("manifest.json").permitAll()
 						    .requestMatchers("logo192.png").permitAll()
+						    .requestMatchers("robots.txt").permitAll()
 						    .anyRequest().authenticated()
+						    
 		    );
+		    //.httpBasic(Customizer.withDefaults());
 		// @formatter:on
-        var chain = httpSecurity.build();
-        return chain;
+        return httpSecurity.build();
     }
 
     private CorsConfigurationSource corsConfigurationSource() {
         return new CorsConfigurationSource() {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                String[] origins = allowedOrigins.split(",");
                 var ccfg = new CorsConfiguration();
-                ccfg.setAllowedOrigins(Arrays.asList("https://localhost:3000"));
+                ccfg.setAllowedOrigins(Arrays.asList(origins));
                 ccfg.setAllowedMethods(Collections.singletonList("*"));
                 ccfg.setAllowCredentials(true);
                 ccfg.setAllowedHeaders(Collections.singletonList("*"));
                 ccfg.setExposedHeaders(Arrays.asList("Authorization"));
                 ccfg.setMaxAge(3600L);
                 return ccfg;
-
             }
         };
     }

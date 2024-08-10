@@ -8,7 +8,7 @@ public class UserSQL {
     // @formatter:off
     public static final String FETCH_USER = """
         FROM com.vac.main.data.entity.UserEntity 
-        WHERE handle = :handle
+        WHERE userName = :userName
           AND deleted = false""";
     // @formatter:on
 
