@@ -3,6 +3,8 @@ import Header from "./pageElements/Header";
 import { useState, useContext } from "react";
 import { Configuration } from "../App";
 import axios from "axios";
+import { Buffer } from "buffer";
+
 
 const Login = (setUser) => {
     const [errorMsg, setErrorMsg] = useState('');
@@ -10,23 +12,41 @@ const Login = (setUser) => {
     const [password, setPassword] = useState('');
     const configuration = useContext(Configuration);
 
+    // const getAuth = () => {
+    //     return 'Basic '+ Buffer.from(userName + ':' + password).toString('base64');
+    // }
+
     const handleLogin = async() => {
-        try {
-            if (userName || password){
-                setErrorMsg("Invalid username/password combintation");
-                return;
-            }
-            const response = axios.post(configuration.url + '/ib/login',{
-                userName,
-                password,
-                "_csrf":configuration.csrfToken
-            }) ;
-            console.log(response);
+        if (!userName || !password){
+            setErrorMsg("Please enter the a name and password");
             return;
-        } catch( error ){
-            console.log('registration', error.response ? error.response.data : error.msg);
-            setErrorMsg(error.msg);
         }
+        console.log("csrf token =", configuration);
+        console.log('Basic ' + Buffer.from(userName + ':' + password).toString('base64'));
+        const auth = 'Basic '+ Buffer.from(userName + ':' + password).toString('base64');
+        console.log('auth is ' + auth);
+        axios.post('/ib/login',{
+            userName,
+            password,
+            '_csrf' : configuration.csrf,
+        },
+        { 
+            headers: {
+                'Authorization' : 'Basic '+ Buffer.from(userName + ':' + password).toString('base64'),
+                'X-XSRF-TOKEN': configuration.csrf,
+                'Content-Type':'application/json'
+            }
+        }
+        )
+        .then((r) =>{
+            console.log('success ', r);
+            configuration.setCurrentView('worklist');
+    
+        })
+        .catch( (error ) => {
+            console.log('login', error.response ? error.response.data : error.msg);
+            setErrorMsg(error.msg);
+        });
     };
     const handleForgotPassword = () => {
         configuration.setCurrentView('forgotPassword');
@@ -41,7 +61,7 @@ const Login = (setUser) => {
         <div className="spacer"></div>
         <div className="loginDialog">
             <h2 className="dialogHeading">ImageBank Login</h2>
-            <form action="/login/signin" method="post">
+            <div>
                 <div className="inputLine">
                     <p className="inputLabel">Name/Email:</p>
                     <input className="inputControl" type="text" name="userName" value={userName}
@@ -57,9 +77,9 @@ const Login = (setUser) => {
                 </div>
                 <div className="dialogButton">
                     <p className="inputLabel"></p>
-                    <button type="submit" onClick={handleLogin}>Login</button>
+                    <button type="button" onClick={handleLogin}>Login</button>
                 </div>
-            </form>
+            </div>
             <div className="dialogLinks">
                 <p>&nbsp;</p>
                 <p className="buttonLink" onClick={handleForgotPassword}>Forgot password</p>

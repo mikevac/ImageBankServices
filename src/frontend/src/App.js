@@ -12,6 +12,7 @@ const App = () => {
   const [urlBase, setUrlBase] = useState('https://localhost:8080/ib/');
   const [csrfToken, setCsrfToken] = useState('');
   const [currentView, setCurrentView] = useState('login');
+  const [basicAuth, setBasicAuth] = useState('');
   useEffect( () => {
     if (csrfToken === '') {
       axios.get('/ib/config')
@@ -25,7 +26,11 @@ const App = () => {
 
   return (
   <>
-    <Configuration.Provider value={{"url": urlBase, "csrf":csrfToken, "setCurrentView" : setCurrentView}}>
+    <Configuration.Provider value={{
+        'url': urlBase, 
+        'csrf':csrfToken, 
+        'setCurrentView' : setCurrentView,
+        'setBasicAuth' : setBasicAuth}}>
       {currentView === 'login' && <Login/>}
       {currentView === 'registration' && <Registration/>}
       {currentView === 'worklist' && <Worklist/>}
