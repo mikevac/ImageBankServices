@@ -2,7 +2,6 @@ package com.vac.main.repositories;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,6 +13,7 @@ import com.vac.main.data.dto.UserDto;
 import com.vac.main.data.entity.RoleEntity;
 import com.vac.main.data.entity.UserEntity;
 import com.vac.main.data.entity.UserRoleEntity;
+import com.vac.main.exceptions.UserNotFoundException;
 import com.vac.main.repositories.response.GenericRepositoryResponse;
 import com.vac.main.repositories.sql.UserSQL;
 
@@ -35,18 +35,18 @@ public class UserRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public Optional<UserDto> findUser(String handle) {
+    public UserDto findUser(String userName) {
         //@formatter:off
         try {
             UserEntity user = 
                     (UserEntity) em.createQuery(UserSQL.FETCH_USER)
-                    .setParameter("handle", handle)
+                    .setParameter("userName", userName)
                     .getSingleResult();
             Set<RoleDto> roles = user.getUserRoleEntities()
                     .stream()
                     .map((r) -> new RoleDto(r.getRoleEntity().getRoleId(), r.getRoleEntity().getRole()))
                     .collect(Collectors.toSet());
-            return Optional.of(new UserDto(user.getUserId(), 
+            return new UserDto(user.getUserId(), 
                     user.getUserName(), 
                     user.getFirstName(), 
                     user.getLastName(),
@@ -55,9 +55,9 @@ public class UserRepository {
                     user.getPassword(),
                     user.getActive(), 
                     user.getTimeZone(),
-                    roles));
+                    roles);
         } catch (NoResultException nre) {
-            return Optional.empty();
+            throw new UserNotFoundException();
         }
         // @formatter:on
     }

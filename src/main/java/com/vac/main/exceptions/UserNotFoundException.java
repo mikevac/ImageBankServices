@@ -1,10 +1,12 @@
 package com.vac.main.exceptions;
 
-public class UserNotFoundException extends RuntimeException {
+import org.springframework.security.core.AuthenticationException;
 
-	private static final long serialVersionUID = 1L;
+public class UserNotFoundException extends AuthenticationException {
 
-	public UserNotFoundException() {
-		super();
-	}
+    private static final long serialVersionUID = 1L;
+
+    public UserNotFoundException() {
+        super("Invalid User");
+    }
 }
