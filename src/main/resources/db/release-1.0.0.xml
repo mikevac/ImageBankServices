@@ -235,10 +235,6 @@
 			GRANT UPDATE ON ALL TABLES IN
 			SCHEMA ibank to ibankuser
 		</sql>
-
-
-
-
 		<sql dbms="postgresql" endDelimiter=";">
 			GRANT DELETE ON ALL TABLES IN
 			SCHEMA ibank to ibankuser

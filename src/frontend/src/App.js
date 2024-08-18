@@ -19,7 +19,6 @@ const App = () => {
         .then((response) => { 
           setUrlBase(response.data.baseUrl + response.data.context);
           setCsrfToken(response.data.token.token);
-          console.log("csrf = " + response.data.token.token);
       });
     }
   }, [csrfToken]);
@@ -29,6 +28,7 @@ const App = () => {
     <Configuration.Provider value={{
         'url': urlBase, 
         'csrf':csrfToken, 
+        'basicAuth': basicAuth,
         'setCurrentView' : setCurrentView,
         'setBasicAuth' : setBasicAuth}}>
       {currentView === 'login' && <Login/>}
