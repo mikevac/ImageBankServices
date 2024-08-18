@@ -35,7 +35,7 @@ const Login = (setUser) => {
             configuration.setCurrentView('worklist');
         })
         .catch( (error ) => {
-            setErrorMsg(error.msg);
+            setErrorMsg("credentials are invalid");
         });
     };
     const handleForgotPassword = () => {
