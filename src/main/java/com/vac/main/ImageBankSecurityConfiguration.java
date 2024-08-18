@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,6 +31,9 @@ public class ImageBankSecurityConfiguration {
     @Autowired
     public IBAuthenticationProvider authenticationProvider;
 
+    @Autowired
+    private IBCustomAuthenticationEntryPoint customEntryPoint;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // @formatter:off
@@ -40,7 +42,7 @@ public class ImageBankSecurityConfiguration {
 		    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 		    .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 		    .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-		    .httpBasic(Customizer.withDefaults())
+		    .httpBasic(basic -> basic.authenticationEntryPoint(customEntryPoint).realmName("ImageBank"))
 		    .authenticationProvider(authenticationProvider)
 		    .authorizeHttpRequests(
 						authorize -> authorize
@@ -60,7 +62,7 @@ public class ImageBankSecurityConfiguration {
 						    .anyRequest().authenticated()
 						    
 		    );
-		    //.httpBasic(Customizer.withDefaults());
+		    
 		// @formatter:on
         return httpSecurity.build();
     }
