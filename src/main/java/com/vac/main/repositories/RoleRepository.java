@@ -25,10 +25,10 @@ public class RoleRepository {
      */
     public RoleDto find(String role) {
 
-        RoleEntity re = (RoleEntity) em
-                .createQuery(RoleSQL.FIND_ROLE_BY_NAME)
+        RoleEntity re = em
+                .createQuery(RoleSQL.FIND_ROLE_BY_NAME, RoleEntity.class)
                 .setParameter("role", role)
                 .getSingleResult();
-        return new RoleDto(re.getRoleId(), re.getRole());
+        return new RoleDto(re.getRoleId(), re.getDescription(), re.getRole());
     }
 }

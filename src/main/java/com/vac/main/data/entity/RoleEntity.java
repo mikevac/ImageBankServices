@@ -1,7 +1,6 @@
 package com.vac.main.data.entity;
 
 import java.math.BigInteger;
-import java.util.Set;
 
 import com.vac.main.data.dto.RoleDto;
 
@@ -10,7 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,15 +23,15 @@ import lombok.Setter;
 public class RoleEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ibank.role_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     private BigInteger roleId;
 
-    @OneToMany(mappedBy = "roleEntity")
-    private Set<UserRoleEntity> userRoles;
-
-    @Column(name = "ROLE")
+    @Column(name = "role")
     private String role;
+
+    @Column(name = "desciption")
+    private String description;
 
     public RoleEntity() {
 
@@ -41,6 +39,7 @@ public class RoleEntity {
 
     public RoleEntity(RoleDto dto) {
         roleId = dto.roleId();
+        description = dto.description();
         role = dto.role();
     }
 }

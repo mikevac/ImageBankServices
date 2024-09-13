@@ -22,6 +22,10 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class IBCustomAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 
+    public IBCustomAuthenticationEntryPoint() {
+        super.setRealmName("ImageBank");
+    }
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authEx) throws IOException {
@@ -30,4 +34,13 @@ public class IBCustomAuthenticationEntryPoint extends BasicAuthenticationEntryPo
         writer.println("HTTP Status 401 - " + authEx.getMessage());
     }
 
+    @Override
+    public String getRealmName() {
+        return super.getRealmName();
+    }
+
+    @Override
+    public void setRealmName(String value) {
+        super.setRealmName(value);
+    }
 }

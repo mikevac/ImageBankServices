@@ -1,13 +1,12 @@
 package com.vac.main.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/login")
@@ -18,11 +17,9 @@ public class LoginController {
         return "login";
     }
 
-    @GetMapping(path = "/fail", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Object> loginFail() {
-        Map<String, Object> parameters = new HashMap<>();
-
-        return parameters;
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "logout";
     }
-
 }

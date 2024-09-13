@@ -18,5 +18,6 @@ import java.math.BigInteger;
 public record RoleDto(
 
         BigInteger roleId,
+        String description,
         String role) {
 }

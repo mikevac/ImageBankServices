@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.vac.main.IBUserDetailsService;
-import com.vac.main.model.IBUserDetails;
+import com.vac.main.model.IBUser;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -25,7 +25,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String userName = authentication.getName();
         String password = authentication.getCredentials().toString();
-        IBUserDetails user = (IBUserDetails) userDetailsService.loadUserByUsername(userName);
+        IBUser user = (IBUser) userDetailsService.loadUserByUsername(userName);
         if (passwordEncoder.matches(password, user.getPassword())) {
             return new UsernamePasswordAuthenticationToken(userName, password, user.getAuthorities());
         }

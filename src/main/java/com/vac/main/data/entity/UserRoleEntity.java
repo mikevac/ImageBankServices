@@ -30,7 +30,8 @@ import lombok.Setter;
 public class UserRoleEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ibank.user_role_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_role_id")
     private BigDecimal userRoleId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

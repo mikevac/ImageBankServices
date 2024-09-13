@@ -1,7 +1,7 @@
 package com.vac.main.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.vac.main.ImageBankApplication;
+import com.vac.uilities.WithMockIBUser;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ImageBankApplication.class)
 @AutoConfigureMockMvc
@@ -38,8 +39,9 @@ class LoginControllerTest {
     }
 
     @Test
+    @WithMockIBUser(password = "foo")
     void loginGetTest() throws Exception {
-        ResultActions action = mockMvc.perform(get("/login"));
+        ResultActions action = mockMvc.perform(post("/login").header("Authorization", "Bearer foo"));
         MvcResult result = action.andExpect(status().isOk()).andReturn();
         MockHttpServletResponse response = result.getResponse();
         assertEquals("login", response.getContentAsString());

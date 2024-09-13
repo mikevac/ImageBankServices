@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,7 +33,7 @@ public class ImageBankSecurityConfiguration {
     public IBAuthenticationProvider authenticationProvider;
 
     @Autowired
-    private IBCustomAuthenticationEntryPoint customEntryPoint;
+    public IBCustomAuthenticationEntryPoint customEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -42,25 +43,25 @@ public class ImageBankSecurityConfiguration {
 		    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 		    .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 		    .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-		    .httpBasic(basic -> basic.authenticationEntryPoint(customEntryPoint).realmName("ImageBank"))
-		    .authenticationProvider(authenticationProvider)
+            .authenticationProvider(authenticationProvider)
+            .httpBasic(basic -> basic.authenticationEntryPoint(customEntryPoint).realmName("ImageBank"))
+		    .httpBasic(Customizer.withDefaults())
 		    .authorizeHttpRequests(
-						authorize -> authorize
-						    .requestMatchers("/").permitAll()
-						    .requestMatchers("/config").permitAll()
-                            .requestMatchers("/forgot").permitAll()
-                            .requestMatchers("/registration").permitAll()
-						    .requestMatchers("index.html").permitAll()
-						    .requestMatchers("hostfile.json").permitAll()
-						    .requestMatchers("static/*").permitAll()
-						    .requestMatchers("static/js/*").permitAll()
-						    .requestMatchers("static/css/*").permitAll()
-						    .requestMatchers("favicon.ico").permitAll()
-						    .requestMatchers("manifest.json").permitAll()
-						    .requestMatchers("logo192.png").permitAll()
-						    .requestMatchers("robots.txt").permitAll()
-						    .anyRequest().authenticated()
-						    
+						auth -> {
+						    auth.requestMatchers("/").permitAll();
+						    auth.requestMatchers("/config").permitAll();
+                            auth.requestMatchers("/forgot").permitAll();
+                            auth.requestMatchers("/registration").permitAll();
+						    auth.requestMatchers("/index.html").permitAll();
+						    auth.requestMatchers("/static/**").permitAll();
+						    auth.requestMatchers("/**/js/**").permitAll();
+						    auth.requestMatchers("/**/css/**").permitAll();
+						    auth.requestMatchers("/favicon.ico").permitAll();
+						    auth.requestMatchers("/manifest.json").permitAll();
+						    auth.requestMatchers("/logo192.png").permitAll();
+						    auth.requestMatchers("/robots.txt").permitAll();
+						    auth.anyRequest().authenticated();
+						}
 		    );
 		    
 		// @formatter:on

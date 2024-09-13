@@ -38,7 +38,6 @@ const Registration = () => {
             setPassStyle('red');
             return false;
         }
-        
         return true;
     }
 

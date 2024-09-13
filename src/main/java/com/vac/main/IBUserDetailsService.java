@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.vac.main.data.dto.UserDto;
-import com.vac.main.model.IBUserDetails;
+import com.vac.main.model.IBUser;
 import com.vac.main.services.UserService;
 
 public class IBUserDetailsService implements UserDetailsService {
@@ -20,7 +20,7 @@ public class IBUserDetailsService implements UserDetailsService {
         if (ibUserDto == null) {
             throw new UsernameNotFoundException("");
         }
-        return new IBUserDetails(ibUserDto);
+        return new IBUser(ibUserDto);
     }
 
 }

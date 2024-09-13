@@ -2,6 +2,7 @@ package com.vac.main.repositories;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import com.vac.main.data.entity.UserEntity;
 import com.vac.main.data.entity.UserRoleEntity;
 import com.vac.main.exceptions.UserNotFoundException;
 import com.vac.main.repositories.response.GenericRepositoryResponse;
+import com.vac.main.repositories.sql.RoleSQL;
 import com.vac.main.repositories.sql.UserSQL;
 
 import jakarta.persistence.EntityExistsException;
@@ -38,13 +40,16 @@ public class UserRepository {
     public UserDto findUser(String userName) {
         //@formatter:off
         try {
-            UserEntity user = 
-                    (UserEntity) em.createQuery(UserSQL.FETCH_USER)
+            
+            UserEntity user = em.createQuery(UserSQL.FETCH_USER, UserEntity.class)
                     .setParameter("userName", userName)
                     .getSingleResult();
-            Set<RoleDto> roles = user.getUserRoleEntities()
+            List<RoleEntity> roleEntityList = em.createQuery(RoleSQL.FETCH_USER_ROLES, RoleEntity.class)
+                    .setParameter("userId", user.getUserId())
+                    .getResultList();
+            Set<RoleDto> roles = roleEntityList
                     .stream()
-                    .map((r) -> new RoleDto(r.getRoleEntity().getRoleId(), r.getRoleEntity().getRole()))
+                    .map((r) -> new RoleDto(r.getRoleId(), r.getDescription(), r.getRole()))
                     .collect(Collectors.toSet());
             return new UserDto(user.getUserId(), 
                     user.getUserName(), 

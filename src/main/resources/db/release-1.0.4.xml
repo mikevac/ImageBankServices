@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog changeLogId="ib-role"
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+	<changeSet author="Michael Vaccaro" id="ib-worklist">
+		<createTable tableName="worklist" schemaName="ibank">
+			<column name="worklist_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="name" type="varchar(200)">
+				<constraints nullable="false" />
+			</column>
+			<column name="user_id" type="int">
+				<constraints nullable="false"
+					references="ibank.user(user_id)" foreignKeyName="fk_user" />
+			</column>
+		</createTable>
+		
+		<createIndex tableName="worklist" indexName="worklist_idx"
+			schemaName="ibank">
+			<column name="name"/>
+		</createIndex>
+		
+		<createTable tableName="doc_to_worklist"
+			schemaName="ibank">
+			<column name="doc_to_worklist_id" type="int"
+				autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="doc_id" type="int">
+				<constraints nullable="false"
+					references="ibank.doc(doc_id)" foreignKeyName="fkdoc" />
+			</column>
+			<column name="album_id" type="int">
+				<constraints nullable="false"
+					references="ibank.album(album_id)" foreignKeyName="fkalbum" />
+			</column>
+		</createTable>
+
+		<createIndex tableName="doc_to_worklist"
+			indexName="doc_to_worklist_idx" schemaName="ibank">
+            <column name="doc_id"/>
+            <column name="album_id"/>
+		</createIndex>
+	</changeSet>
+
+</databaseChangeLog>

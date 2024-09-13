@@ -17,13 +17,15 @@
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <frontend-src-dir>${project.basedir}/src/frontend</frontend-src-dir>
         <node.version>v20.14.0</node.version>
-        <frontend-maven-plugin.version>1.15.0</frontend-maven-plugin.version>
+        
         <changeLogFile>release-1.0.0.xml</changeLogFile>
         <url>jdbc:postgresql://localhost:5432/image_bank</url>
         <username>postgres</username>
         <password>redrover</password>
+
+        <frontend-src-dir>${project.basedir}/src/main/frontend</frontend-src-dir>
+        <frontend-maven-plugin.version>1.15.0</frontend-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -78,7 +80,6 @@
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
         </dependency>
-
     </dependencies>
     <build>
         <plugins>
@@ -176,7 +177,7 @@
                         <phase>prepare-package</phase>
                         <configuration>
                             <outputDirectory>
-                                ${project.build.outputDirectory}/static</outputDirectory>
+                                ${project.build.outputDirectory}</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${frontend-src-dir}/build</directory>
