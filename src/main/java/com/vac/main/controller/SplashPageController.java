@@ -25,7 +25,7 @@ public class SplashPageController {
     public String getSplashPage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         var outputBuffer = new StringBuilder();
-        var inStream = SplashPageController.class.getResourceAsStream("/index.html");
+        var inStream = SplashPageController.class.getResourceAsStream("/static/index.html");
         var bufferedReader = new BufferedReader(new InputStreamReader(inStream));
         String line = bufferedReader.readLine();
         while (line != null) {

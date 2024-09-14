@@ -177,7 +177,7 @@
                         <phase>prepare-package</phase>
                         <configuration>
                             <outputDirectory>
-                                ${project.build.outputDirectory}</outputDirectory>
+                                ${project.build.outputDirectory}/static</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${frontend-src-dir}/build</directory>

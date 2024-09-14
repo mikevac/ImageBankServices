@@ -9,13 +9,13 @@ import axios from 'axios';
 export const Configuration = createContext({});
 
 const App = () => {
-  const [urlBase, setUrlBase] = useState('https://localhost:8080/ib/');
+  const [urlBase, setUrlBase] = useState('https://localhost:8080/');
   const [csrfToken, setCsrfToken] = useState('');
   const [currentView, setCurrentView] = useState('login');
   const [basicAuth, setBasicAuth] = useState('');
   useEffect( () => {
     if (csrfToken === '') {
-      axios.get('/ib/config')
+      axios.get('/config')
         .then((response) => { 
           setUrlBase(response.data.baseUrl + response.data.context);
           setCsrfToken(response.data.token.token);

@@ -48,14 +48,14 @@ public class ImageBankSecurityConfiguration {
 		    .httpBasic(Customizer.withDefaults())
 		    .authorizeHttpRequests(
 						auth -> {
+						    
 						    auth.requestMatchers("/").permitAll();
 						    auth.requestMatchers("/config").permitAll();
                             auth.requestMatchers("/forgot").permitAll();
                             auth.requestMatchers("/registration").permitAll();
 						    auth.requestMatchers("/index.html").permitAll();
-						    auth.requestMatchers("/static/**").permitAll();
-						    auth.requestMatchers("/**/js/**").permitAll();
-						    auth.requestMatchers("/**/css/**").permitAll();
+						    auth.requestMatchers("/static/js/*").permitAll();
+						    auth.requestMatchers("/static/css/*").permitAll();
 						    auth.requestMatchers("/favicon.ico").permitAll();
 						    auth.requestMatchers("/manifest.json").permitAll();
 						    auth.requestMatchers("/logo192.png").permitAll();

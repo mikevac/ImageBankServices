@@ -15,7 +15,7 @@ public class ConfigurationController {
     @Value("${config.baseurl}")
     private String baseUrl;
 
-    @GetMapping("/")
+    @GetMapping("")
     public ConfigResponse getConfig(CsrfToken token) {
         var config = new ConfigResponse();
         config.setBaseUrl(baseUrl);
