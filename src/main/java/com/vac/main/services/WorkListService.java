@@ -24,6 +24,7 @@ public class WorkListService extends IBService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public Long getWorkListPageCount(Long pageSize) {
         Long totalRowCount = workListRepo.count(getUser().getUserId());
         return totalRowCount / pageSize;

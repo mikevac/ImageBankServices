@@ -13,12 +13,6 @@ import java.util.Set;
  *                        of this user in the database
  * @param userName        a {@link String} object that holds the user's name:
  *                        e.g. "JohnnyQ", "MeatHead", etc.
- * @param firstName       a {@link String} object that holds the user's first
- *                        name. may be null as it is an optional field when
- *                        registering. E.g. "Michael", "Jane", etc
- * @param lastName        a {@link String} object that holds the user's last
- *                        name. may be null as it is an optional field when
- *                        registering. E.g. "Smith", "Jones", etc
  * @param emailAddress    a {@link String} object that holds the user's email
  *                        address. used to verify if the user is real. E.g.
  *                        Jane@aol.com
@@ -41,8 +35,6 @@ public record UserDto(
 
         BigInteger userId,
         String userName,
-        String firstName,
-        String lastName,
         String emailAddress,
         LocalDate dateEstablished,
         String password,

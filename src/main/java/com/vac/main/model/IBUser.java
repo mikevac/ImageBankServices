@@ -15,8 +15,6 @@ public class IBUser extends User {
 
     private static final long serialVersionUID = 1L;
     private final BigInteger userId;
-    private final String firstName;
-    private final String lastName;
     private final String emailAddress;
     private final String timeZone;
 
@@ -24,8 +22,6 @@ public class IBUser extends User {
         super(user.userName(), user.password(), true, true,
                 true, true, user.roles().stream().map(r -> new SimpleGrantedAuthority(r.role())).toList());
         userId = user.userId();
-        firstName = user.firstName();
-        lastName = user.lastName();
         emailAddress = user.emailAddress();
         timeZone = user.timeZone();
     }
@@ -35,8 +31,6 @@ public class IBUser extends User {
         super(userName, password, true, true, true, true,
                 Arrays.asList(roles).stream().map(r -> new SimpleGrantedAuthority(r)).toList());
         this.userId = userId;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.emailAddress = emailAddress;
         this.timeZone = timezone;
     }

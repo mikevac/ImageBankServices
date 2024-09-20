@@ -17,7 +17,7 @@ const Login = (setUser) => {
             setErrorMsg("Please enter the a name and password");
             return;
         }
-        axios.post('/ib/login',{
+        axios.post('/login',{
             userName,
             password,
             '_csrf' : configuration.csrf,
@@ -32,7 +32,7 @@ const Login = (setUser) => {
         )
         .then((r) =>{
             configuration.setBasicAuth('Basic '+ Buffer.from(userName + ':' + password).toString('base64'));
-            configuration.setCurrentView('worklist');
+            configuration.setCurrentView('homepage');
         })
         .catch( (error ) => {
             setErrorMsg("credentials are invalid");
