@@ -61,14 +61,14 @@ public class UserEntity {
     public UserEntity(UserDto dto, RoleDto roleDto) {
         userId = dto.userId();
         userName = dto.userName();
-        firstName = dto.firstName();
-        lastName = dto.lastName();
         emailAddress = dto.emailAddress();
         password = dto.password();
         active = dto.isActive();
         deleted = false;
         dateEstablished = Date.valueOf(dto.dateEstablished());
         timeZone = dto.timeZone();
+        firstName = " ";
+        lastName = " ";
     }
 
 }

@@ -30,7 +30,7 @@ public class RoleEntity {
     @Column(name = "role")
     private String role;
 
-    @Column(name = "desciption")
+    @Column(name = "description")
     private String description;
 
     public RoleEntity() {

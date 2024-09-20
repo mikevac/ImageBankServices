@@ -19,16 +19,6 @@ public class RegistrationRequest {
     @NotNull(message = "The user name must be specified.")
     private String userName;
 
-    @Pattern(regexp = RegExp.ALPHA_NUMERIC, message = "Invalid characters in first name.")
-    @Size(min = 2, max = 35, message = "First name must be 2 to 35 characters long with no spaces.")
-    @NotNull(message = "The first name must be specified.")
-    private String firstName;
-
-    @Pattern(regexp = RegExp.ALPHA_NUMERIC, message = "Invalid characters in last name.")
-    @Size(min = 2, max = 35, message = "Last name must be 2 to 35 characters long with no spaces.")
-    @NotNull(message = "The last name must be specified.")
-    private String LastName;
-
     @Pattern(regexp = RegExp.PASSWORD_CHARS, message = "Invalid characters in password.")
     @Size(min = 8, max = 30, message = "Password must be 8 to 30 characters in length.")
     @NotNull(message = "The password must be specified.")

@@ -42,13 +42,13 @@ public class RegistrationController {
         return errorResponse;
     }
 
-    @PostMapping(path = "", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public String postRegistration(@Valid @RequestBody RegistrationRequest request) {
         Set<RoleDto> roles = new HashSet<>();
         var establishDate = LocalDate.now();
-        var user = new UserDto(null, request.getUserName(), request.getFirstName(), request.getLastName(),
-                request.getEmailAddr(), establishDate, passwordEncoder.encode(request.getPassword()), false, "ET",
+        var user = new UserDto(null, request.getUserName(), request.getEmailAddr(), establishDate,
+                passwordEncoder.encode(request.getPassword()), false, "ET",
                 roles);
         GenericServiceResponse response = userService.createUser(user);
         return response.message();

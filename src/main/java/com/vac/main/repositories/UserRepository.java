@@ -53,8 +53,6 @@ public class UserRepository {
                     .collect(Collectors.toSet());
             return new UserDto(user.getUserId(), 
                     user.getUserName(), 
-                    user.getFirstName(), 
-                    user.getLastName(),
                     user.getEmailAddress(), 
                     user.getDateEstablished().toLocalDate(),  
                     user.getPassword(),

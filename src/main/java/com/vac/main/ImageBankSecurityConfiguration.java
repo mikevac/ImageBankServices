@@ -2,6 +2,7 @@ package com.vac.main;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,10 +16,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
+import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
@@ -38,18 +43,29 @@ public class ImageBankSecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // @formatter:off
-        
+        var delegate = new XorCsrfTokenRequestAttributeHandler();
+        delegate.setCsrfRequestAttributeName("_csrf");
+        CsrfTokenRequestHandler requestHandler = new CsrfTokenRequestHandler() {
+
+            @Override
+            public void handle(HttpServletRequest request, HttpServletResponse response,
+                    Supplier<CsrfToken> csrfToken) {
+                delegate.handle(request, response, csrfToken);
+                
+            }
+        };
 		httpSecurity
 		    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 		    .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-		    .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+		    .csrf(csrf -> {
+		        csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+		        csrf.csrfTokenRequestHandler(requestHandler);
+		        })
             .authenticationProvider(authenticationProvider)
             .httpBasic(basic -> basic.authenticationEntryPoint(customEntryPoint).realmName("ImageBank"))
 		    .httpBasic(Customizer.withDefaults())
 		    .authorizeHttpRequests(
 						auth -> {
-						    
-						    auth.requestMatchers("/").permitAll();
 						    auth.requestMatchers("/config").permitAll();
                             auth.requestMatchers("/forgot").permitAll();
                             auth.requestMatchers("/registration").permitAll();
@@ -60,6 +76,7 @@ public class ImageBankSecurityConfiguration {
 						    auth.requestMatchers("/manifest.json").permitAll();
 						    auth.requestMatchers("/logo192.png").permitAll();
 						    auth.requestMatchers("/robots.txt").permitAll();
+                            auth.requestMatchers("/").permitAll();
 						    auth.anyRequest().authenticated();
 						}
 		    );

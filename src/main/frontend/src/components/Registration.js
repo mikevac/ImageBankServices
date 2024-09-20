@@ -9,14 +9,11 @@ const Registration = () => {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [emailAddr, setEmailAddr] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [confirmPass, setConfirmPass] = useState('');
     const [passStyle, setPassStyle] = useState('blue');
 
     const complexity = (password) => {
-        if (password.length < 12){
-            setErrorMsg("Passwords must be 12 or more characters in length");
+        if (password.length < 8){
+            setErrorMsg("Passwords must be 8 or more characters in length");
             setPassStyle('red');
             return false;
         } 
@@ -48,6 +45,7 @@ const Registration = () => {
     }
 
     const sendRegistration = async () => {
+        console.log("in sendRegistration");
         if (!userName || !password || !emailAddr) {
             setErrorMsg('Missing details.  Please fill in all fields');
             return;
@@ -55,29 +53,19 @@ const Registration = () => {
         if (!complexity(password)){
             return;
         }
-        if (confirmPass !== password) {
-            setErrorMsg('Passwords do not match');
-            setPassStyle('red');
-            return;
-        } else {
-            setPassStyle('blue');
-        }
-        axios.post('/ib/registration', {
+        axios.post('/registration', {
                 userName : userName,
-                firstName: firstName,
-                lastName: lastName,
                 password : password,
-                emailAddr: emailAddr
+                emailAddr: emailAddr,
+                _csrf : configuration.csrf
             },
             { headers: {
-                'X-XSRF-TOKEN': configuration.csrf,
                 "Content-Type":'application/json'
                 }
             }
         )
         .then((r) =>{
-            configuration.setCurrentView('login');
-    
+            configuration.setCurrentView('login');    
         })
         .catch((error) => {
             setErrorMsg(error.msg);
@@ -89,7 +77,7 @@ const Registration = () => {
             <Header />
             <div className="spacer"></div>
             <form className="loginDialog">
-                <h2 className="dialogHeading">New Login Registration</h2>
+                <h2 className="dialogHeading">Registration</h2>
 
                 <div>
                     <div className="dialogLine">
@@ -105,16 +93,10 @@ const Registration = () => {
                     </div>
                     <div className="dialogLine">
                         <p>
-                            <span className="dialogLabel">First Name:</span>
-                            <input type="text" id='firstName' name='firstName' value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)} />
-                        </p>
-                    </div>
-                    <div className="dialogLine">
-                        <p>
-                            <span className="dialogLabel">Last Name:</span>
-                            <input type="text" id='lastName' name='lastName' value={lastName}
-                                onChange={(e) => setLastName(e.target.value)} />
+                            <span className="dialogLabel">Email Address:</span>
+                            <input type="email" id="emailAddr" value={emailAddr}
+                                name='emailAddr'
+                                onChange={(e) => setEmailAddr(e.target.value)} />
                         </p>
                     </div>
                     <div className="dialogLine">
@@ -123,22 +105,6 @@ const Registration = () => {
                             <input type="password" id='password' value={password}
                                 name='password' autoComplete='new-password' style={{color:passStyle}}
                                 onChange={(e) => onPassChange(e)} />
-                        </p>
-                    </div>
-                    <div className="dialogLine">
-                        <p>
-                            <span className="dialogLabel" style={{color :  passStyle}}>Confirm Password:</span>
-                            <input type="password" id='confirmPass' style={{color: passStyle}}
-                                name='confirmPass' autoComplete='new-password'
-                                onChange={(e) => setConfirmPass(e.target.value)} />
-                        </p>
-                    </div>
-                    <div className="dialogLine">
-                        <p>
-                            <span className="dialogLabel">Email Address:</span>
-                            <input type="email" id="emailAddr" value={emailAddr}
-                                name='emailAddr'
-                                onChange={(e) => setEmailAddr(e.target.value)} />
                         </p>
                     </div>
                     <div>
