@@ -2,7 +2,6 @@ package com.vac.main.repositories;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,7 +15,6 @@ import com.vac.main.data.entity.UserEntity;
 import com.vac.main.data.entity.UserRoleEntity;
 import com.vac.main.exceptions.UserNotFoundException;
 import com.vac.main.repositories.response.GenericRepositoryResponse;
-import com.vac.main.repositories.sql.RoleSQL;
 import com.vac.main.repositories.sql.UserSQL;
 
 import jakarta.persistence.EntityExistsException;
@@ -44,12 +42,10 @@ public class UserRepository {
             UserEntity user = em.createQuery(UserSQL.FETCH_USER, UserEntity.class)
                     .setParameter("userName", userName)
                     .getSingleResult();
-            List<RoleEntity> roleEntityList = em.createQuery(RoleSQL.FETCH_USER_ROLES, RoleEntity.class)
-                    .setParameter("userId", user.getUserId())
-                    .getResultList();
-            Set<RoleDto> roles = roleEntityList
-                    .stream()
-                    .map((r) -> new RoleDto(r.getRoleId(), r.getDescription(), r.getRole()))
+            Set<RoleEntity> roleEntityList = 
+                    user.getRoles().stream().map( ur -> ur.getRoleEntity()).collect(Collectors.toSet());
+            Set<RoleDto> roles = roleEntityList.stream()
+                    .map(ure -> new RoleDto(ure.getRoleId(), ure.getDescription(), ure.getRole()))
                     .collect(Collectors.toSet());
             return new UserDto(user.getUserId(), 
                     user.getUserName(), 
@@ -74,6 +70,7 @@ public class UserRepository {
             userRoleEntity.setRoleEntity(roleEntity);
             userRoleEntity.setExpiration(Date.valueOf(LocalDate.now().plusYears(1L)));
             em.persist(userEntity);
+            em.persist(userRoleEntity);
             return new GenericRepositoryResponse(RepositoryStatus.SUCCESS, "User created successfully");
         } catch (EntityExistsException x) {
             return new GenericRepositoryResponse(RepositoryStatus.FAILURE, "User already exists");

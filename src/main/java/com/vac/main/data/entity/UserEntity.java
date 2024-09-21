@@ -2,6 +2,7 @@ package com.vac.main.data.entity;
 
 import java.math.BigInteger;
 import java.sql.Date;
+import java.util.Set;
 
 import com.vac.main.data.dto.RoleDto;
 import com.vac.main.data.dto.UserDto;
@@ -11,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,6 +56,9 @@ public class UserEntity {
     @Column(name = "time_zone")
     private String timeZone;
 
+    @OneToMany(mappedBy = "userEntity")
+    private Set<UserRoleEntity> roles;
+
     public UserEntity() {
 
     }
@@ -67,8 +72,6 @@ public class UserEntity {
         deleted = false;
         dateEstablished = Date.valueOf(dto.dateEstablished());
         timeZone = dto.timeZone();
-        firstName = " ";
-        lastName = " ";
     }
 
 }

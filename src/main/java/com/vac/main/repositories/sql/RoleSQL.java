@@ -10,7 +10,7 @@ public class RoleSQL {
             WHERE r.role = :role
             """;
     public static final String FETCH_USER_ROLES = """
-            FROM com.vac.main.data.entity.RoleEntity r
-            WHERE r.userId = :userId;
+            FROM com.vac.main.data.entity.UserRoleEntity
+            WHERE userEntity.userId = :userId;
             """;
 }

@@ -42,46 +42,45 @@ public class ImageBankSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        // @formatter:off
+
         var delegate = new XorCsrfTokenRequestAttributeHandler();
         delegate.setCsrfRequestAttributeName("_csrf");
+
         CsrfTokenRequestHandler requestHandler = new CsrfTokenRequestHandler() {
 
             @Override
             public void handle(HttpServletRequest request, HttpServletResponse response,
                     Supplier<CsrfToken> csrfToken) {
                 delegate.handle(request, response, csrfToken);
-                
+
             }
         };
-		httpSecurity
-		    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-		    .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-		    .csrf(csrf -> {
-		        csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-		        csrf.csrfTokenRequestHandler(requestHandler);
-		        })
-            .authenticationProvider(authenticationProvider)
-            .httpBasic(basic -> basic.authenticationEntryPoint(customEntryPoint).realmName("ImageBank"))
-		    .httpBasic(Customizer.withDefaults())
-		    .authorizeHttpRequests(
-						auth -> {
-						    auth.requestMatchers("/config").permitAll();
+        httpSecurity
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> {
+                    csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+                    csrf.csrfTokenRequestHandler(requestHandler);
+                })
+                .authenticationProvider(authenticationProvider)
+                .httpBasic(basic -> basic.authenticationEntryPoint(customEntryPoint).realmName("ImageBank"))
+                .httpBasic(Customizer.withDefaults())
+                .authorizeHttpRequests(
+                        auth -> {
+                            auth.requestMatchers("/config").permitAll();
                             auth.requestMatchers("/forgot").permitAll();
                             auth.requestMatchers("/registration").permitAll();
-						    auth.requestMatchers("/index.html").permitAll();
-						    auth.requestMatchers("/static/js/*").permitAll();
-						    auth.requestMatchers("/static/css/*").permitAll();
-						    auth.requestMatchers("/favicon.ico").permitAll();
-						    auth.requestMatchers("/manifest.json").permitAll();
-						    auth.requestMatchers("/logo192.png").permitAll();
-						    auth.requestMatchers("/robots.txt").permitAll();
+                            auth.requestMatchers("/index.html").permitAll();
+                            auth.requestMatchers("/static/js/*").permitAll();
+                            auth.requestMatchers("/static/css/*").permitAll();
+                            auth.requestMatchers("/favicon.ico").permitAll();
+                            auth.requestMatchers("/manifest.json").permitAll();
+                            auth.requestMatchers("/logo192.png").permitAll();
+                            auth.requestMatchers("/robots.txt").permitAll();
                             auth.requestMatchers("/").permitAll();
-						    auth.anyRequest().authenticated();
-						}
-		    );
-		    
-		// @formatter:on
+                            auth.anyRequest().authenticated();
+                        });
+
         return httpSecurity.build();
     }
 
