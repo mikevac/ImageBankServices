@@ -11,6 +11,19 @@ const Login = (setUser) => {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const configuration = useContext(Configuration);
+    const [passVisibility, setPassVisibility] = useState('false');
+
+    const togglePass = (event) => {
+        setPassVisibility(!passVisibility);
+        if (passVisibility){
+            document.getElementById("password").type = "text";
+            document.getElementById("passTog").textContent = 'X';
+        } else {
+            document.getElementById("password").type = "password";
+            document.getElementById("passTog").textContent = 'O';
+        }
+    }
+
 
     const handleLogin = async() => {
         if (!userName || !password){
@@ -60,9 +73,14 @@ const Login = (setUser) => {
                 </div>
                 <div className="inputLine">
                     <p className="inputLabel">Password:</p>
-                    <input className="inputControl" type="password" name="password" value={password}
+                    <input className="inputControl" 
+                        id="password"
+                        type="password" 
+                        name="password" 
+                        value={password}
                         autoComplete="current-password"
                         onChange={(e) => setPassword(e.target.value)} />
+                    <span id="passTog" style={{marginLeft: "-20px", cursor: "pointer"}} onClick={(e) => togglePass(e)}>O</span>
                 </div>
                 <div>
                     {errorMsg && <p className="error">{errorMsg}</p>}
