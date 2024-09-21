@@ -10,6 +10,7 @@ const Registration = () => {
     const [password, setPassword] = useState('');
     const [emailAddr, setEmailAddr] = useState('');
     const [passStyle, setPassStyle] = useState('blue');
+    const [passVisibility, setPassVisibility] = useState('false');
 
     const complexity = (password) => {
         if (password.length < 8){
@@ -39,9 +40,21 @@ const Registration = () => {
     }
 
     const configuration = useContext(Configuration);
+
     const onPassChange = (event) => {
         setPassword(event.target.value);
         setPassStyle('blue');
+    }
+
+    const togglePass = (event) => {
+        setPassVisibility(!passVisibility);
+        if (passVisibility){
+            document.getElementById("password").type = "text";
+            document.getElementById("passTog").textContent = 'X';
+        } else {
+            document.getElementById("password").type = "password";
+            document.getElementById("passTog").textContent = 'O';
+        }
     }
 
     const sendRegistration = async () => {
@@ -103,8 +116,11 @@ const Registration = () => {
                         <p>
                             <span className="dialogLabel" style={{color: passStyle}}>Password:</span>
                             <input type="password" id='password' value={password}
-                                name='password' autoComplete='new-password' style={{color:passStyle}}
+                                name='password' 
+                                autoComplete='new-password' 
+                                style={{color:passStyle}}
                                 onChange={(e) => onPassChange(e)} />
+                            <span id="passTog" style={{marginLeft: "-20px", cursor: "pointer"}} onClick={(e) => togglePass(e)}>O</span>
                         </p>
                     </div>
                     <div>
